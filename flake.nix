@@ -4,28 +4,31 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    rust-overlay.url = "github:oxalica/rust-overlay";
   };
 
-
-  outputs = { self, nixpkgs, flake-utils }: 
+  outputs = { self, nixpkgs, flake-utils, rust-overlay }:
     flake-utils.lib.eachDefaultSystem (system:
       let
+        overlays = [ (import rust-overlay) ];
         pkgs = import nixpkgs {
-          inherit system;
+          inherit system overlays;
         };
       in {
         devShells.default = pkgs.mkShell {
-          packages = with pkgs; [
+          buildInputs = with pkgs; [
+            zsh
             git
             nodejs_22
             pnpm_10
-            zsh
             python3
-            rustc
-            cargo
+            pkg-config
+            rust-bin.stable.latest.default
+            eza
           ];
 
           shellHook = ''
+            alias ls=eza
             echo "🔧 Development environment ready!"
           '';
         };
