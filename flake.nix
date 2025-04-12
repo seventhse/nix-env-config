@@ -15,10 +15,14 @@
         };
       in {
         devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [
+          packages = with pkgs; [
             git
             nodejs_22
             pnpm_10
+            zsh
+            python3
+            rustc
+            cargo
           ];
 
           shellHook = ''
