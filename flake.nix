@@ -16,8 +16,6 @@
       in {
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
-            direnv
-            nix-direnv
             git
             nodejs_22
             pnpm_10
